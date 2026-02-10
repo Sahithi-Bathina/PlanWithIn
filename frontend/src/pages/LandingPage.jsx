@@ -98,7 +98,6 @@ const LandingPage = () => {
             <div className="text-[#2C3E50]/40 text-[10px] font-black tracking-[0.2em] uppercase italic leading-relaxed text-center md:text-left">
               Built for the curious. Optimized for the bold.
               <br /> 
-              <span className="text-[#B2C5B2] not-italic">Developed by Sahithi Bathina</span>
             </div>
           </div>
           
