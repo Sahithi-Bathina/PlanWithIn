@@ -4,8 +4,7 @@ import { motion } from "framer-motion";
 
 /**
  * LandingPage Component
- * The entry point of the application. Focuses on high-impact visuals
- * and clear calls-to-action (CTA).
+ * Updated with professional Developer contact info in the footer.
  */
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -31,7 +30,6 @@ const LandingPage = () => {
             backgroundImage: "url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&q=80&w=1920')"
           }}
         >
-          {/* Multi-layered overlays for depth */}
           <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-white/60"></div>
           <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px]"></div>
         </div>
@@ -84,7 +82,6 @@ const LandingPage = () => {
           </div>
         </motion.div>
 
-        {/* Decorative Path Element */}
         <div className="absolute right-0 bottom-20 hidden 2xl:block opacity-20 pointer-events-none">
           <svg width="600" height="200" viewBox="0 0 500 200" fill="none">
             <path d="M0 150C100 150 150 50 300 50C450 50 500 150 600 150" stroke="#B2C5B2" strokeWidth="8" strokeLinecap="round" strokeDasharray="20 20" />
@@ -92,23 +89,28 @@ const LandingPage = () => {
         </div>
       </motion.main>
 
-      {/* FOOTER */}
+      {/* FOOTER - UPDATED WITH NAME AND EMAIL */}
       <footer className="relative z-10 bg-white/60 backdrop-blur-xl border-t border-[#B2C5B2]/10 py-12 px-6 md:px-16 mt-auto">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+          
           <div className="flex flex-col items-center md:items-start space-y-2">
             <p className="text-[#2C3E50] font-black text-xl tracking-tighter">PlanWithIn</p>
-            <p className="text-[#2C3E50]/30 text-[10px] font-black tracking-[0.2em] uppercase italic">
+            <div className="text-[#2C3E50]/40 text-[10px] font-black tracking-[0.2em] uppercase italic leading-relaxed text-center md:text-left">
               Built for the curious. Optimized for the bold.
-              <br /> Developed by @SahithiBathina
-            </p>
+              <br /> 
+              <span className="text-[#B2C5B2] not-italic">Developed by Sahithi Bathina</span>
+            </div>
           </div>
           
-          <div className="flex gap-12 text-[11px] font-black tracking-[0.15em] text-[#2C3E50]/50 uppercase">
+          <div className="flex flex-wrap justify-center gap-8 md:gap-12 text-[11px] font-black tracking-[0.15em] text-[#2C3E50]/50 uppercase">
+            <a href="mailto:sahithi3105@gmail.com" className="hover:text-[#B2C5B2] transition-colors flex items-center gap-2">
+              <span className="text-[#B2C5B2] text-sm">@</span> Contact
+            </a>
             <a href="/" className="hover:text-[#B2C5B2] transition-colors">Privacy</a>
             <a href="/" className="hover:text-[#B2C5B2] transition-colors">Terms</a>
-            <a href="/" className="hover:text-[#B2C5B2] transition-colors">Safety</a>
             <a href="/" className="hover:text-[#B2C5B2] transition-colors">API</a>
           </div>
+
         </div>
       </footer>
     </div>
