@@ -67,9 +67,12 @@ const HomePage = () => {
     setStatus("searching");
     setError("");
 
+    // SMART URL SELECTION: Use Vercel variable if it exists, otherwise use Localhost
+    const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
     try {
-      // UPDATED: URL changed to /api/plans to match your backend app.js
-      const res = await fetch("http://localhost:5000/api/plans/generate", {
+      // Combined the URL variable with your specific endpoint path
+      const res = await fetch(`${API_BASE_URL}/api/plans/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -116,7 +119,6 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-[#2C3E50] px-6 md:px-24 py-12 text-white font-sans">
       
-      {/* UPDATED HEADER: Added History Navigation */}
       <div className="mb-12 flex items-center justify-between">
         <div className="flex items-center gap-4 cursor-pointer" onClick={() => navigate("/")}>
           <div className="w-10 h-10 rounded-xl bg-[#B2C5B2] flex items-center justify-center text-white font-bold shadow-lg shadow-[#B2C5B2]/20">P</div>

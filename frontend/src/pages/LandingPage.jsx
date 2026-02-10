@@ -70,7 +70,7 @@ const LandingPage = () => {
 
           <p className="mt-10 text-xl md:text-2xl text-[#2C3E50]/70 max-w-2xl leading-relaxed font-medium">
             Stop scrolling, start exploring.
-            <br />Generate your optimal local itinerary in seconds.
+            <br />Generate your optimal local itinerary in seconds. 
           </p>
 
           <div className="mt-14 flex">
@@ -99,6 +99,7 @@ const LandingPage = () => {
             <p className="text-[#2C3E50] font-black text-xl tracking-tighter">PlanWithIn</p>
             <p className="text-[#2C3E50]/30 text-[10px] font-black tracking-[0.2em] uppercase italic">
               Built for the curious. Optimized for the bold.
+              <br /> Developed by @SahithiBathina
             </p>
           </div>
           
