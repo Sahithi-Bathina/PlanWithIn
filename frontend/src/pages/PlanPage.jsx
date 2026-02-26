@@ -11,7 +11,6 @@ const PlanPage = () => {
   const [planData, setPlanData] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  // INTERNAL SAGE GREEN ALERTS
   const showToast = (message, icon = "success") => {
     const Toast = Swal.mixin({
       toast: true,
@@ -40,26 +39,58 @@ const PlanPage = () => {
     return m > 0 ? `${h}h ${m}m` : `${h}h`;
   };
 
-  useEffect(() => {
-    const raw = state?.activePlan || JSON.parse(sessionStorage.getItem("planData") || "{}")?.activePlan;
-    if (!raw) {
-      navigate("/home", { replace: true });
-      return;
-    }
-    let sourcePlan = raw.bestPlan ? raw.bestPlan : raw;
-    const sanitizedPlan = {
-      totalTimeUsed: sourcePlan.totalTimeUsed || 0,
-      totalCost: sourcePlan.totalCost || 0,
-      steps: (sourcePlan.steps || []).map(s => ({
-        action: s.action || "VISIT",
-        description: s.description || "Activity",
-        location: s.location || "Nearby",
-        time: s.time || 0,
-        cost: s.cost || 0
-      }))
+useEffect(() => {
+  const raw = state?.activePlan || JSON.parse(sessionStorage.getItem("planData") || "{}")?.activePlan;
+  
+  if (!raw) {
+    navigate("/home", { replace: true });
+    return;
+  }
+
+  let sourcePlan = raw.bestPlan ? raw.bestPlan : raw;
+
+  const processedSteps = (sourcePlan.steps || []).map((s, idx) => {
+    const safeName = s.name || s.description || "";
+    const nameLower = safeName.toLowerCase();
+    const isTravel = nameLower.includes('travel');
+    const isReturn = nameLower.includes('return') || nameLower.includes('complete');
+
+    // CASCADING FALLBACK LOGIC
+    // 1. Try specific return key -> 2. Try general travel key -> 3. Try general cost key -> 4. Default
+    const stepCost = isReturn 
+      ? (Number(s.travelCostToStart) || Number(s.travelCost) || Number(s.cost) || 0)
+      : isTravel 
+      ? (Number(s.travelCost) || Number(s.cost) || 0)
+      : (Number(s.averageSpend) || Number(s.cost) || 0);
+
+    const stepTime = isReturn
+      ? (Number(s.travelTimeToStart) || Number(s.travelTimeFromStart) || Number(s.duration) || Number(s.time) || 0)
+      : isTravel
+      ? (Number(s.travelTimeFromStart) || Number(s.duration) || Number(s.time) || 0)
+      : (Number(s.averageTime) || Number(s.time) || 0);
+
+    return {
+      action: isTravel ? "TRANSPORT" : isReturn ? "END" : (s.category || "VISIT"),
+      description: safeName || "Activity",
+      location: (isTravel || isReturn) ? "" : (s.city || s.location || ""),
+      time: Math.round(stepTime),
+      cost: Math.round(stepCost)
     };
-    setPlanData({ activePlan: sanitizedPlan, planType: state?.planType || "optimal" });
-  }, [state, navigate]);
+  });
+
+  // Calculate totals purely from what is displayed to ensure 100% accuracy in header
+  const totalTimeUsed = processedSteps.reduce((sum, s) => sum + s.time, 0);
+  const totalCost = processedSteps.reduce((sum, s) => sum + s.cost, 0);
+
+  const sanitizedPlan = {
+    totalTimeUsed,
+    totalCost,
+    steps: processedSteps
+  };
+
+  setPlanData({ activePlan: sanitizedPlan, planType: state?.planType || "optimal" });
+  sessionStorage.setItem("planData", JSON.stringify({ activePlan: sanitizedPlan }));
+}, [state, navigate]);
 
   const handleSaveItinerary = async () => {
     if (!planData?.activePlan) return;
